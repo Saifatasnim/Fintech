@@ -9,13 +9,20 @@ class InvestmentController extends Controller
 {
 
     public function getMonthlyROI()
-{
-    return Investment::selectRaw('YEAR(investment_date) as year, MONTH(investment_date) as month, AVG(roi) as average_roi, AVG(target) as average_target')
-                     ->groupBy('year', 'month')
-                     ->orderByRaw('YEAR(investment_date) ASC, MONTH(investment_date) ASC')
-                     ->get();
-}
-
+    {
+        $roiData = Investment::selectRaw('YEAR(investment_date) as year, MONTH(investment_date) as month, AVG(roi) as average_roi, AVG(target) as average_target')
+                             ->groupBy('year', 'month')
+                             ->orderByRaw('YEAR(investment_date) ASC, MONTH(investment_date) ASC')
+                             ->get();
+    
+        // Adding serial numbers directly in the query or through a loop if necessary
+        $roiData = $roiData->each(function ($item, $key) {
+            $item->serial = $key + 1; // Assuming that your items are naturally ordered or have an inherent sequence
+        });
+    
+        return $roiData;
+    }
+    
     /**
      * Display a listing of the resource.
      */

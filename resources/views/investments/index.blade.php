@@ -70,7 +70,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('roiChart').getContext('2d');
     const roiData = @json($monthlyROI);
-    const labels = roiData.map(data => `${data.month}-${data.year}`);
+    
+    // Use a combination of serial number and date for labels
+    const labels = roiData.map(data => `#${data.serial} (${data.month}-${data.year})`);
+
     const data = {
         labels: labels,
         datasets: [{
@@ -98,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
 </script>
 
 
